@@ -21,6 +21,14 @@ class CreateThreadsTest extends TestCase
     }
 
     /** @test */
+    public function 認証されていないユーザはスレッド作成画面を見れない()
+    {
+        $this->withExceptionHandling()
+            ->get('/threads/create')
+            ->assertRedirect('/login');
+    }
+
+    /** @test */
     public function 認証されたユーザは新しくスレッドを作成出来る()
     {
         $this->signIn();
