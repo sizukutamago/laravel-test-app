@@ -13,27 +13,22 @@ class CreateThreadsTest extends TestCase
     /** @test */
     public function 認証されていないユーザは新しくスレッドを作成出来ない()
     {
-        $this->expectException('Illuminate\Auth\AuthenticationException');
+        $this->withExceptionHandling();
 
-        $thread = make('App\Thread');
+        $this->get('/threads/create')
+            ->assertRedirect('/login');
 
-        $this->post('/threads', $thread->toArray());
-    }
-
-    /** @test */
-    public function 認証されていないユーザはスレッド作成画面を見れない()
-    {
-        $this->withExceptionHandling()
-            ->get('/threads/create')
+        $this->post('/threads')
             ->assertRedirect('/login');
     }
+
 
     /** @test */
     public function 認証されたユーザは新しくスレッドを作成出来る()
     {
         $this->signIn();
 
-        $thread = make('App\Thread');
+        $thread = create('App\Thread');
 
         $this->post('/threads', $thread->toArray());
 

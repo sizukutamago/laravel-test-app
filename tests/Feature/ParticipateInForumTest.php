@@ -13,9 +13,9 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     public function 認証されていないユーザは返信することができない()
     {
-        $this->expectException('Illuminate\Auth\AuthenticationException');
-
-        $this->post('/threads/1/replies', []);
+        $this->withExceptionHandling()
+            ->post('/threads/some-channel/1/replies', [])
+            ->assertRedirect('/login');
 
     }
 
@@ -24,9 +24,9 @@ class ParticipateInForumTest extends TestCase
     {
         $this->be($user = factory('App\User')->create());
 
-        $thread = factory('App\Thread')->create();
+        $thread = create('App\Thread');
 
-        $reply = factory('App\Reply')->make();
+        $reply = make('App\Reply');
         $this->post($thread->path() . '/replies', $reply->toArray());
 
         $this->get($thread->path())

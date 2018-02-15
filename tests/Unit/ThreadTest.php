@@ -28,6 +28,14 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
+    public function 文字列のパスを作成できる()
+    {
+        $this->assertEquals(
+            "/threads/{$this->thread->channel->slug}/{$this->thread->id}", $this->thread->path()
+        );
+    }
+
+    /** @test */
     public function 一人の作成者()
     {
         $this->assertInstanceOf(
@@ -44,5 +52,13 @@ class ThreadTest extends TestCase
         ]);
 
         $this->assertCount(1, $this->thread->replies);
+    }
+
+    /** @test */
+    public function スレッドは一つのチャンネルに属する()
+    {
+        $this->assertInstanceOf(
+            'App\Channel', $this->thread->channel
+        );
     }
 }
